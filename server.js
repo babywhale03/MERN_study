@@ -5,6 +5,7 @@ const id = process.env.ID;
 const pw = process.env.PW;
 
 app.use(express.static(__dirname + "/public"));
+app.set("view engine", "ejs");
 
 const { MongoClient } = require("mongodb");
 
@@ -35,5 +36,9 @@ app.get("/news", (요청, 응답) => {
 app.get("/list", async (요청, 응답) => {
   let result = await db.collection("post").find().toArray();
   console.log(result);
-  응답.send(result[0].title);
+  응답.render("list.ejs", { 글목록: result });
+});
+
+app.get("/time", (요청, 응답) => {
+  응답.render("time.ejs", { data: new Date() });
 });
