@@ -9,7 +9,7 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 let db;
 const url = `mongodb+srv://${id}:${pw}@cluster0.nmv3tex.mongodb.net/?retryWrites=true&w=majority`;
@@ -64,5 +64,21 @@ app.post("/add", async (요청, 응답) => {
   } catch (e) {
     console.log(e);
     응답.status(500).send("서버 에러남"); // 500 : 서버 잘못으로 인한 에러라는 뜻
+  }
+});
+
+app.get("/detail/:id", async (요청, 응답) => {
+  try {
+    let result = await db
+      .collection("post")
+      .findOne({ _id: new ObjectId(요청.params.id) });
+    console.log(요청.params);
+    if (result == null) {
+      응답.status(400).send("이상한 url 입력함");
+    }
+    응답.render("detail.ejs", { result: result });
+  } catch (e) {
+    console.log(e);
+    응답.status(400).send("이상한 url 입력함"); // 4xx: 유저 문제
   }
 });
