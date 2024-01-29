@@ -92,12 +92,13 @@ app.get("/edit/:id", async (요청, 응답) => {
   응답.render("edit.ejs", { result: result });
 });
 
-app.post("/edit", async (요청, 응답) => {
-  await db
-    .collection("post")
-    .updateOne(
-      { _id: new ObjectId(요청.body.id) },
-      { $set: { title: 요청.body.title, content: 요청.body.content } }
-    );
-  응답.redirect("/list");
+app.put("/edit", async (요청, 응답) => {
+  await db.collection("post").updateOne({ _id: 1 }, { $inc: { like: 2 } });
+  // await db
+  //   .collection("post")
+  //   .updateOne(
+  //     { _id: new ObjectId(요청.body.id) },
+  //     { $set: { title: 요청.body.title, content: 요청.body.content } }
+  //   );
+  // 응답.redirect("/list");
 });
