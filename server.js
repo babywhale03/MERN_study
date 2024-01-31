@@ -110,3 +110,23 @@ app.delete("/delete", async (요청, 응답) => {
     .deleteOne({ _id: new ObjectId(요청.query.docid) });
   응답.send("삭제완료");
 });
+
+// app.get("/list/:id", async (요청, 응답) => {
+//   let result = await db
+//     .collection("post")
+//     .find()
+//     .skip((요청.params.id - 1) * 5) // 큰 숫자 넣으면 수행 시간 오래 걸림
+//     .limit(5)
+//     .toArray();
+//   응답.render("list.ejs", { 글목록: result });
+// });
+
+/* 장점 : 매우 빠름, 단점 : '다음' 버튼으로 바꿔야 함 */
+app.get("/list/next/:id", async (요청, 응답) => {
+  let result = await db
+    .collection("post")
+    .find({ _id: { $gt: new ObjectId(요청.params.id) } })
+    .limit(5)
+    .toArray();
+  응답.render("list.ejs", { 글목록: result });
+});
